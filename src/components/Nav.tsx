@@ -1,6 +1,6 @@
-import { useLocation, createAsync, A } from "@solidjs/router";
+import { useLocation, createAsync, A, useIsRouting } from "@solidjs/router";
 import { JSXElement, createSignal, Show, onMount, createEffect } from "solid-js";
-import { getUser } from "../lib/login";
+import { getUser, logout } from "../lib/login";
 
 type NavLinkProps = {
   href: string;
@@ -20,20 +20,45 @@ function NavLink(props: NavLinkProps) {
 }
 
 export default function Nav() {
-  const placeholdr = true
+  const user = createAsync(() => getUser().catch(() => null), { deferStream: true });
+  const isRouting = useIsRouting();
 
+  const handleLogout = async (e: Event) => {
+    e.preventDefault();
+    await logout();
+    // Navigation will happen automatically from the action
+  };
   return (
-    <nav class="bg-sky-800">
-      <ul class="container flex items-center p-3 text-gray-200">
-        <NavLink href="/">Home</NavLink>
-        <NavLink href="/about">About</NavLink>
-        <NavLink href="/rostersTemplate">Template</NavLink>
-
-        <Show when={placeholdr}>
-          <NavLink href="/login">Login</NavLink>
-        </Show>
-
-      </ul>
-    </nav>
+    <>
+      {/* Loading indicator for client-side navigation */}
+      <Show when={isRouting()}>
+        <div class="bg-yellow-100 text-yellow-800 text-center p-1 fixed top-0 left-0 w-full z-50">
+          Loading...
+        </div>
+      </Show>
+      
+      <nav class="bg-sky-800">
+        <ul class="container flex items-center p-3 text-gray-200">
+          <NavLink href="/">Home</NavLink>
+          <NavLink href="/about">About</NavLink>
+          <NavLink href="/rostersTemplate">Templates</NavLink>
+          
+          <div class="ml-auto flex items-center">
+            <Show when={!user()} fallback={
+              <>
+                <span class="mr-4">Welcome, {user()?.username}</span>
+                <form onSubmit={handleLogout}>
+                  <button type="submit" class="bg-red-600 px-3 py-1 rounded text-white hover:bg-red-700">
+                    Logout
+                  </button>
+                </form>
+              </>
+            }>
+              <NavLink href="/login">Login</NavLink>
+            </Show>
+          </div>
+        </ul>
+      </nav>
+    </>
   );
 }

@@ -2,12 +2,12 @@ import { createAsync, type RouteDefinition } from "@solidjs/router";
 import { getTemplateRosters } from "~/lib/roster";
 import { getUser } from "~/lib/login";
 
+
 export const route = {
-  preload() { getTemplateRosters(), getUser() }
+  preload() { getTemplateRosters()}
 } satisfies RouteDefinition;
 
-export default function Home() {
-  const user = createAsync(() => getUser(), { deferStream: true });
+export default function RosterTemplates() {
   
   const templates = createAsync(() => getTemplateRosters(), { deferStream: true });
 
