@@ -1,13 +1,15 @@
-import { createAsync, type RouteDefinition } from "@solidjs/router";
+import { createAsync, type RouteDefinition, A } from "@solidjs/router";
 import { getTemplateRosters } from "~/lib/roster";
 import { getUser } from "~/lib/login";
+import { c } from "vinxi/dist/types/lib/logger";
 
 
 export const route = {
-  preload() { getTemplateRosters()}
+  load() { getTemplateRosters(), getUser(); },
 } satisfies RouteDefinition;
 
 export default function RosterTemplates() {
+  const user = createAsync(() => getUser(), { deferStream: true });
   
   const templates = createAsync(() => getTemplateRosters(), { deferStream: true });
 
@@ -22,9 +24,9 @@ export default function RosterTemplates() {
       <ul class="list-disc pl-5">
         {templates()?.map(tpl => (
           <li>
-            <a href={`/rosters/${tpl.rosterId}`} class="text-blue-600 hover:underline">
+            <A href={`/rosters/${tpl.rosterId}`} class="text-blue-600 hover:underline">
               {tpl.name ?? "(no name)"} — {tpl?.players.length ?? 0} players
-            </a>
+            </A>
           </li>
         ))}
       </ul>

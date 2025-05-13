@@ -23,11 +23,6 @@ export default function Nav() {
   const user = createAsync(() => getUser().catch(() => null), { deferStream: true });
   const isRouting = useIsRouting();
 
-  const handleLogout = async (e: Event) => {
-    e.preventDefault();
-    await logout();
-    // Navigation will happen automatically from the action
-  };
   return (
     <>
       {/* Loading indicator for client-side navigation */}
@@ -47,11 +42,11 @@ export default function Nav() {
             <Show when={!user()} fallback={
               <>
                 <span class="mr-4">Welcome, {user()?.username}</span>
-                <form onSubmit={handleLogout}>
-                  <button type="submit" class="bg-red-600 px-3 py-1 rounded text-white hover:bg-red-700">
-                    Logout
-                  </button>
-                </form>
+                <form action={logout} method="post">
+        <button name="logout" type="submit">
+          Logout
+        </button>
+      </form>
               </>
             }>
               <NavLink href="/login">Login</NavLink>
