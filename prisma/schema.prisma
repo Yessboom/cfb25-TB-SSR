@@ -1,0 +1,190 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId        String   @id @default(uuid())
+  username      String?  @unique
+  password      String
+  rosters       Roster[]
+  playerLoadouts PlayerLoadout[]
+}
+
+model Roster {
+  rosterId      String   @id @default(uuid())
+  name          String?
+  userId        String
+  isTemplate     Boolean @default(false)
+  user          User?     @relation(fields: [userId], references: [userId])
+  players       Player[]
+}
+
+model Player {
+  id                     String      @id @default(uuid())
+  playerId               String      
+  firstName              String
+  lastName               String
+  jerseyNumber           Int
+  overallRating          Int
+  
+  // Physical Attributes
+  speed                  Int
+  acceleration           Int
+  strength               Int
+  agility                Int
+  height                 Int
+  weightPounds           Int
+  age                    Int
+  
+  // Performance Attributes
+  awareness              Int
+  catching               Int
+  carrying               Int
+  throwPower             Int
+  throwAccuracy          Int
+  kickPower              Int
+  kickAccuracy           Int
+  runBlock               Int
+  passBlock              Int
+  tackle                 Int
+  jumping                Int
+  kickReturn             Int
+  injury                 Int
+  stamina                Int
+  toughness              Int
+  
+  // Advanced Performance Attributes
+  trucking               Int
+  changeOfDirection      Int
+  backfieldVision        Int
+  stiffArm               Int
+  spinMove               Int
+  jukeMove               Int
+  impactBlocking         Int
+  runBlockPower          Int
+  runBlockFinesse        Int
+  passBlockPower         Int
+  passBlockFinesse       Int
+  powerMoves             Int
+  finesseMoves           Int
+  blockShedding          Int
+  pursuit                Int
+  playRecognition        Int
+  
+  // Coverage and Special Skills
+  manCoverage            Int
+  zoneCoverage           Int
+  spectacularCatch       Int
+  catchInTraffic         Int
+  mediumRouteRun         Int
+  hitPower               Int
+  
+  // Additional Attributes
+  position               Int
+  potential              Int
+  home_town              String?
+  home_state             Int?
+  college                Int?
+  
+  // Contract and Career Details
+  contractYearsLeft      Int
+  validTotalSalary       Float
+  validSignBonus         Float
+  salary1                Float
+  validContractLen       Int
+  careerPhase            Int
+  
+  // Visual and Equipment Data
+  genericHead            Int
+  genericHeadName        String?
+  bodyType               Int?
+  skinTone               Int
+  skinToneScale          BigInt
+  
+  // Roster Relationship
+  rosterId               String?
+  roster                 Roster?     @relation(fields: [rosterId], references: [rosterId])
+  
+  // Equipment Loadouts
+  loadouts               PlayerLoadout[]
+  
+  // Additional Flags and Miscellaneous
+  longSnapRating         Int
+  portrait               Int
+  performLevel           Int
+  consecYearsWithTeam    Int
+  sleeveTemperature      Int
+  runningStyle           Int
+  ego                    Int
+  handedness             Int
+  muscle                 Int
+  style                  Int
+  prevTeamId             Int
+  flagProBowl            Int
+  traitDevelopment       Int
+  isCaptain              Boolean
+  isImpactPlayer         Boolean
+  isEditAllowed          Boolean
+  isGuestStar            Boolean
+  
+  // Specific Skill Attributes
+  throwAccuracyShort     Int
+  throwAccuracyMid       Int
+  throwAccuracyDeep      Int
+  playAction             Int
+  throwOnTheRun          Int
+  breakTackle            Int
+  breakSack              Int
+  throwUnderPressure     Int
+  leadBlock              Int
+  shortRouteRun          Int
+  deepRouteRun           Int
+  
+  // Identifiers
+  origId                 Int
+  assetName              String
+  characterBodyType      Int
+
+  @@unique([playerId, rosterId])
+}
+
+model PlayerLoadout {
+  playerLoadoutId   String            @id @default(uuid())
+  playerId          String
+  userId            String?
+  player            Player?            @relation(fields: [playerId], references: [id])
+  user              User?             @relation(fields: [userId], references: [userId])
+
+  loadoutType       Int
+  loadoutCategory   Int
+
+  loadoutElements   PlayerLoadoutToElement[]
+}
+
+model LoadoutElement {
+  loadoutElementId  String            @id @default(uuid())
+  slotType          Int
+  itemAssetName     String
+  barycentricBlend  Float?
+  baseBlend         Float?
+
+  playerLoadouts    PlayerLoadoutToElement[]
+}
+
+model PlayerLoadoutToElement {
+  playerLoadoutId   String
+  loadoutElementId  String
+
+  playerLoadout     PlayerLoadout     @relation(fields: [playerLoadoutId], references: [playerLoadoutId])
+  loadoutElement    LoadoutElement    @relation(fields: [loadoutElementId], references: [loadoutElementId])
+
+  @@id([playerLoadoutId, loadoutElementId])
+}
