@@ -29,7 +29,8 @@ export default function PlayerList({
               <PlayerRow 
                 player={player} 
                 isSelected={selectedPlayerId === player.id}
-                onSelect={onSelectPlayer}
+                href={`?selected=${player.id}`}
+
               />
             )}
           </For>

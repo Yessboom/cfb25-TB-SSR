@@ -5,6 +5,7 @@ import { createSignal, createEffect, Show, onMount } from "solid-js";
 import PlayerDetails from "~/components/PlayerDetails";
 import PlayerList from "~/components/PlayerList";
 import { Player } from "~/types";
+import {useSearchParams} from "@solidjs/router";
 
 export const route = {
   load({ params }) { 
@@ -14,11 +15,17 @@ export const route = {
 
 export default function RosterDetails() {
   const params = useParams();
+  const [searchParams] = useSearchParams();
+
   const roster = createAsync(() => getRosterWithPlayers(params.rosterId), { deferStream: true });
   
-  // State for selected player - use null instead of undefined for clearer debugging
-  const [selectedPlayerId, setSelectedPlayerId] = createSignal<string | null>(null);
-  const [selectedPlayer, setSelectedPlayer] = createSignal<Player | null>(null);
+  const selectedPlayerId = () => searchParams.selected ?? null;
+  const selectedPlayer = () => {
+  const rosterData = roster();
+    if (!rosterData || !selectedPlayerId()) return null;
+    return rosterData.players.find(p => p.id === selectedPlayerId()) ?? null;
+  };
+
 
   // Debug: Log when the component mounts
   onMount(() => {
@@ -28,18 +35,7 @@ export default function RosterDetails() {
   // Handle player selection
   const handleSelectPlayer = (player: Player) => {
     console.log("handleSelectPlayer called with:", player);
-    
-    if (selectedPlayerId() === player.id) {
-      // If clicking the same player again, deselect
-      console.log("Deselecting player");
-      setSelectedPlayerId(null);
-      setSelectedPlayer(null);
-    } else {
-      // Select the new player
-      console.log(`Selecting player: ${player.firstName} ${player.lastName}`);
-      setSelectedPlayerId(player.id);
-      setSelectedPlayer(player);
-    }
+
     
     // Verify state was updated
     setTimeout(() => {
@@ -50,15 +46,7 @@ export default function RosterDetails() {
     }, 0);
   };
 
-  // Reset selected player when roster changes
-  createEffect(() => {
-    const currentRoster = roster();
-    if (currentRoster) {
-      console.log("Roster changed, resetting selected player");
-      setSelectedPlayerId(null);
-      setSelectedPlayer(null);
-    }
-  });
+
 
   // Debug: Log when roster or selected player changes
   createEffect(() => {
@@ -91,7 +79,7 @@ export default function RosterDetails() {
                 <h3 class="text-xl font-semibold mb-3">Players</h3>
                 <PlayerList 
                   players={rosterData().players as Player[]} 
-                  selectedPlayerId={selectedPlayerId() ?? undefined}
+                  selectedPlayerId={selectedPlayerId()}
                   onSelectPlayer={handleSelectPlayer}
                 />
               </div>
