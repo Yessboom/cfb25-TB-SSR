@@ -37,6 +37,7 @@ export default function Nav() {
           <NavLink href="/">Home</NavLink>
           <NavLink href="/about">About</NavLink>
           <NavLink href="/rostersTemplate">Templates</NavLink>
+          <NavLink href="/myRosters">myRosters</NavLink>
           
           <div class="ml-auto flex items-center">
             <Show when={!user()} fallback={
