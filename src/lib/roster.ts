@@ -310,3 +310,14 @@ export const createRosterFromTemplate = async (form: FormData) => {
 
 export const createRosterFromTemplateAction = action(createRosterFromTemplate);
 
+export async function deleteRosterById(rosterId: string) {
+  "use server"
+  const session = await getSession()
+  if (!session) throw new Error("Not authenticated")
+  const r = await db.roster.findUnique({ where: { rosterId } })
+  if (!r || r.userId !== session.data.userId) {
+    throw new Error("Not found or no permission")
+  }
+  await db.roster.delete({ where: { rosterId } })
+}
+export const deleteRosterAction = action(deleteRosterById)
