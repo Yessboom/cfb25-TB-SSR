@@ -1,5 +1,6 @@
 import { A } from "@solidjs/router";
 import { Player } from "~/types";
+import { getPositionName } from "~/utils/utils";
 
 export default function PlayerRow({
   player,
@@ -19,7 +20,7 @@ export default function PlayerRow({
         >
           <div class="w-1/5">{player.firstName} {player.lastName}</div>
           <div class="w-1/5 text-center">{player.jerseyNumber}</div>
-          <div class="w-1/5 text-center">{player.position}</div>
+          <div class="w-1/5 text-center">{getPositionName(player.position)}</div>
           <div class="w-1/5 text-center">{player.overallRating}</div>
           <div class="w-1/5 text-center">{player.age}</div>
         </A>

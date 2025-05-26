@@ -31,3 +31,37 @@ export function getPositionName(positionCode: number | string): string {
     
     return positions[code] || "Unknown";
   }
+
+export function formatHeight(heightInInches: number): string {
+  const feet = Math.floor(heightInInches / 12);
+  const inches = heightInInches % 12;
+  const cm = Math.round(heightInInches * 2.54);
+  const meters = (cm / 100).toFixed(2);
+  //return `${feet}'${inches}"`;
+  return(meters + " m");
+  
+}
+
+export function formatDevTrait(traitCode: string | undefined): string {
+    if (!traitCode) return "N/A";
+    
+    const traits: Record<string, string> = {
+      "0": "Normal",
+      "1": "Impact",
+      "2": "Star",
+      "3": "Elite"
+    };
+    
+    return traits[traitCode] || traitCode;
+  }
+
+  //Helper function to format weight
+export function formatWeight(weight: number | undefined): string {
+    if (!weight) return "N/A";
+    
+    const kg = Math.round((160+weight) * 0.453592);
+    return `${kg} kg`;
+  }
+
+
+
