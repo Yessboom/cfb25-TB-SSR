@@ -143,6 +143,7 @@ export interface Player {
   characterBodyType: number;
 }
 
+
 export interface PlayerLoadout {
   playerLoadoutId: string;
   playerId: string;
@@ -151,7 +152,7 @@ export interface PlayerLoadout {
   user?: User | null;
   loadoutType: number;
   loadoutCategory: number;
-  loadoutElements: PlayerLoadoutToElement[];
+  loadoutElements: LoadoutElement[];  // Direct many-to-many relation
 }
 
 export interface LoadoutElement {
@@ -160,12 +161,5 @@ export interface LoadoutElement {
   itemAssetName: string;
   barycentricBlend: number | null;
   baseBlend: number | null;
-  playerLoadouts: PlayerLoadoutToElement[];
-}
-
-export interface PlayerLoadoutToElement {
-  playerLoadoutId: string;
-  loadoutElementId: string;
-  playerLoadout: PlayerLoadout;
-  loadoutElement: LoadoutElement;
+  playerLoadouts: PlayerLoadout[];  // Direct many-to-many relation
 }

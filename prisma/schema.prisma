@@ -161,12 +161,13 @@ model PlayerLoadout {
   playerId          String
   userId            String?
   player            Player?            @relation(fields: [playerId], references: [id])
-  user              User?             @relation(fields: [userId], references: [userId])
+  user              User?              @relation(fields: [userId], references: [userId])
 
   loadoutType       Int
   loadoutCategory   Int
 
-  loadoutElements   PlayerLoadoutToElement[]
+  // Implicit many-to-many relation with LoadoutElement
+  loadoutElements   LoadoutElement[]   @relation("PlayerLoadoutElements")
 }
 
 model LoadoutElement {
@@ -176,15 +177,6 @@ model LoadoutElement {
   barycentricBlend  Float?
   baseBlend         Float?
 
-  playerLoadouts    PlayerLoadoutToElement[]
-}
-
-model PlayerLoadoutToElement {
-  playerLoadoutId   String
-  loadoutElementId  String
-
-  playerLoadout     PlayerLoadout     @relation(fields: [playerLoadoutId], references: [playerLoadoutId])
-  loadoutElement    LoadoutElement    @relation(fields: [loadoutElementId], references: [loadoutElementId])
-
-  @@id([playerLoadoutId, loadoutElementId])
+  // Implicit many-to-many relation with PlayerLoadout
+  playerLoadouts    PlayerLoadout[]   @relation("PlayerLoadoutElements")
 }

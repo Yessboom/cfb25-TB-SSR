@@ -63,11 +63,7 @@ export const getPlayerDetails = query(async (playerId: string) => {
       include: {
         loadouts: {
           include: {
-            loadoutElements: {
-              include: {
-                loadoutElement: true
-              }
-            }
+            loadoutElements: true 
           }
         },
         roster: true
@@ -81,3 +77,6 @@ export const getPlayerDetails = query(async (playerId: string) => {
     throw new Error("Failed to load player details");
   }
 }, "player-details");
+
+
+
