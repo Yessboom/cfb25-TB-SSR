@@ -97,7 +97,7 @@ const activeTab = createMemo(() => new URLSearchParams(location.search).get("tab
               </div>
 
             <div class="border-t border-gray-200">
-              <PlayerSkillTabs player={selectedPlayer()} />
+              <PlayerSkillTabs player={selectedPlayer} />
             </div>
 
               {/* Contract Info */}

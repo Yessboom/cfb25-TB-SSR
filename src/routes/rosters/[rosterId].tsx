@@ -1,7 +1,7 @@
 import { createAsync, type RouteDefinition } from "@solidjs/router";
 import { getRosterWithPlayers } from "~/lib/roster";
 import { useParams, A } from "@solidjs/router";
-import { createSignal, createEffect, Show, onMount } from "solid-js";
+import { createSignal, createEffect, Show, onMount, type Accessor } from "solid-js";
 import PlayerDetails from "~/components/PlayerDetails";
 import PlayerList from "~/components/PlayerList";
 import { Player } from "~/types";
@@ -18,12 +18,18 @@ export default function RosterDetails() {
   const [searchParams] = useSearchParams();
 
   const roster = createAsync(() => getRosterWithPlayers(params.rosterId), { deferStream: true });
-  
-  const selectedPlayerId = () => searchParams.selected ?? null;
-  const selectedPlayer = () => {
-  const rosterData = roster();
+
+  const selectedPlayerId = (): string | undefined => {
+    const { selected } = searchParams;
+    if (Array.isArray(selected)) {
+      return selected[0];
+    }
+    return selected;
+  };
+  const selectedPlayer: Accessor<Player | null> = () => {
+    const rosterData = roster();
     if (!rosterData || !selectedPlayerId()) return null;
-    return rosterData.players.find(p => p.id === selectedPlayerId()) ?? null;
+    return (rosterData.players as Player[]).find(p => p.id === selectedPlayerId()) ?? null;
   };
 
 
