@@ -16,7 +16,7 @@ export default function ImpactPlayerToggle(props: ImpactPlayerToggleProps) {
   return (
     <form action={updatePlayerBasicInfo} method="post" class="inline-block">
       <input type="hidden" name="playerId" value={props.playerId} />
-      <input type="hidden" name="field" value="impactPlayer" />
+      <input type="hidden" name="field" value="isImpactPlayer" />
       <input type="hidden" name="value" value={props.isImpactPlayer ? "0" : "1"} />
       
       <button 
