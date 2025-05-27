@@ -1,5 +1,5 @@
 // actions/player.ts
-import { action } from "@solidjs/router";
+import { action, redirect } from "@solidjs/router";
 import { db } from "./db";
 import { getSession } from "./server";
 
@@ -14,6 +14,7 @@ export const updatePlayerBasicInfo = action(async (formData: FormData) => {
     const playerId = String(formData.get("playerId"));
     const field = String(formData.get("field"));
     const value = String(formData.get("value"));
+    const redirectPath = formData.get("redirect") as string;
 
     // Verify the player belongs to a roster owned by this user
     const player = await db.player.findFirst({
@@ -49,9 +50,26 @@ export const updatePlayerBasicInfo = action(async (formData: FormData) => {
       data: updateData
     });
 
+    // If redirect path is provided (no-JS scenario), redirect back to the page
+    if (redirectPath) {
+      throw redirect(redirectPath);
+    }
+
     return { success: true };
   } catch (error) {
     console.error("Update player basic info error:", error);
+    
+    // Handle redirect errors (these are actually successful redirects)
+    if (error && typeof error === 'object' && 'status' in error && error.status === 302) {
+      throw error;
+    }
+    
+    const redirectPath = formData.get("redirect") as string;
+    if (redirectPath) {
+      // For no-JS scenario, redirect back with error (you might want to add error handling)
+      throw redirect(redirectPath);
+    }
+    
     return { error: error instanceof Error ? error.message : "Update failed" };
   }
 });
@@ -67,6 +85,7 @@ export const updatePlayerSkill = action(async (formData: FormData) => {
     const playerId = String(formData.get("playerId"));
     const skillName = String(formData.get("skillName"));
     const skillValue = parseInt(String(formData.get("skillValue")));
+    const redirectPath = formData.get("redirect") as string;
 
     // Validate skill value range
     if (skillValue < 0 || skillValue > 99) {
@@ -112,9 +131,26 @@ export const updatePlayerSkill = action(async (formData: FormData) => {
       data: { [skillName]: skillValue }
     });
 
+    // If redirect path is provided (no-JS scenario), redirect back to the page
+    if (redirectPath) {
+      throw redirect(redirectPath);
+    }
+
     return { success: true };
   } catch (error) {
     console.error("Update player skill error:", error);
+    
+    // Handle redirect errors (these are actually successful redirects)
+    if (error && typeof error === 'object' && 'status' in error && error.status === 302) {
+      throw error;
+    }
+    
+    const redirectPath = formData.get("redirect") as string;
+    if (redirectPath) {
+      // For no-JS scenario, redirect back with error (you might want to add error handling)
+      throw redirect(redirectPath);
+    }
+    
     return { error: error instanceof Error ? error.message : "Update failed" };
   }
 });
