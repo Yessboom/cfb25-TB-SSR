@@ -72,6 +72,8 @@ async function importRostersAndVisuals() {
             lastName: playerRosterData.PLYR_LASTNAME || '',
             jerseyNumber: safeParseInt(playerRosterData.PLYR_JERSEYNUM),
             overallRating: safeParseInt(playerRosterData.PLYR_OVERALLRATING),
+            
+            // Physical Attributes
             speed: safeParseInt(playerRosterData.PLYR_SPEED),
             acceleration: safeParseInt(playerRosterData.PLYR_ACCELERATION),
             strength: safeParseInt(playerRosterData.PLYR_STRENGTH),
@@ -79,6 +81,8 @@ async function importRostersAndVisuals() {
             height: safeParseInt(playerRosterData.PLYR_HEIGHT),
             weightPounds: safeParseInt(playerRosterData.PLYR_WEIGHT),
             age: safeParseInt(playerRosterData.PLYR_AGE),
+            
+            // Performance Attributes
             awareness: safeParseInt(playerRosterData.PLYR_AWARENESS),
             catching: safeParseInt(playerRosterData.PLYR_CATCHING),
             carrying: safeParseInt(playerRosterData.PLYR_CARRYING),
@@ -94,6 +98,8 @@ async function importRostersAndVisuals() {
             injury: safeParseInt(playerRosterData.PLYR_INJURY),
             stamina: safeParseInt(playerRosterData.PLYR_STAMINA),
             toughness: safeParseInt(playerRosterData.PLYR_TOUGHNESS),
+            
+            // Advanced Performance Attributes
             trucking: safeParseInt(playerRosterData.PLYR_TRUCKING),
             changeOfDirection: safeParseInt(playerRosterData.PLYR_CHANGEOFDIRECTION),
             backfieldVision: safeParseInt(playerRosterData.PLYR_BCVISION),
@@ -110,28 +116,39 @@ async function importRostersAndVisuals() {
             blockShedding: safeParseInt(playerRosterData.PLYR_BLOCKSHEDDING),
             pursuit: safeParseInt(playerRosterData.PLYR_PURSUIT),
             playRecognition: safeParseInt(playerRosterData.PLYR_PLAYRECOGNITION),
+            release: safeParseInt(playerRosterData.PLYR_RELEASE),
+            
+            // Coverage and Special Skills
             manCoverage: safeParseInt(playerRosterData.PLYR_MANCOVERAGE),
             zoneCoverage: safeParseInt(playerRosterData.PLYR_ZONECOVERAGE),
             spectacularCatch: safeParseInt(playerRosterData.PLYR_SPECTACULARCATCH),
             catchInTraffic: safeParseInt(playerRosterData.PLYR_CATCHINTRAFFIC),
             mediumRouteRun: safeParseInt(playerRosterData.PLYR_MEDROUTERUN),
             hitPower: safeParseInt(playerRosterData.PLYR_HITPOWER),
+            
+            // Additional Attributes
             position: safeParseInt(playerRosterData.PLYR_POSITION),
             potential: safeParseInt(playerRosterData.PLYR_POTENTIAL),
             home_town: playerRosterData.PLYR_HOME_TOWN || '',
             home_state: safeParseInt(playerRosterData.PLYR_HOME_STATE),
             college: safeParseInt(playerRosterData.PLYR_COLLEGE),
+            
+            // Contract and Career Details
             contractYearsLeft: safeParseInt(playerRosterData.PLYR_CONTRACTYEARSLEFT),
             validTotalSalary: safeParseFloat(playerRosterData.PLYR_VALIDTOTALSALARY),
             validSignBonus: safeParseFloat(playerRosterData.PLYR_VALIDSIGNBONUS),
             salary1: safeParseFloat(playerRosterData.PLYR_SALARY1),
             validContractLen: safeParseInt(playerRosterData.PLYR_VALIDCONTRACTLEN),
             careerPhase: safeParseInt(playerRosterData.PLYR_CAREERPHASE),
+            
+            // Visual and Equipment Data
             genericHead: safeParseInt(playerRosterData.PLYR_GENERICHEAD),
             genericHeadName: playerVisualData.genericHeadName || '',
             bodyType: playerVisualData.bodyType ? parseInt(playerVisualData.bodyType, 10) : 1,
             skinTone: safeParseInt(playerVisualData.skinTone),
             skinToneScale: safeBigInt(playerVisualData.skinToneScale),
+            
+            // Additional Flags and Miscellaneous
             longSnapRating: safeParseInt(playerRosterData.PLYR_LONGSNAPRATING),
             portrait: safeParseInt(playerRosterData.PLYR_PORTRAIT),
             performLevel: safeParseInt(playerRosterData.PLYR_PERFORMLEVEL),
@@ -149,6 +166,8 @@ async function importRostersAndVisuals() {
             isImpactPlayer: playerRosterData.PLYR_IS_IMPACT_PLAYER === "1",
             isEditAllowed: playerRosterData.PLYR_IS_EDIT_ALLOWED === "1",
             isGuestStar: playerRosterData.PLYR_IS_GUEST_STAR === "True",
+            
+            // Specific Skill Attributes
             throwAccuracyShort: safeParseInt(playerRosterData.PLYR_THROWACCURACYSHORT),
             throwAccuracyMid: safeParseInt(playerRosterData.PLYR_THROWACCURACYMID),
             throwAccuracyDeep: safeParseInt(playerRosterData.PLYR_THROWACCURACYDEEP),
@@ -160,9 +179,32 @@ async function importRostersAndVisuals() {
             leadBlock: safeParseInt(playerRosterData.PLYR_LEADBLOCK),
             shortRouteRun: safeParseInt(playerRosterData.PLYR_SHORTROUTERUN),
             deepRouteRun: safeParseInt(playerRosterData.PLYR_DEEPROUTERUN),
+            press: safeParseInt(playerRosterData.PLYR_PRESS),
+            
+            // Identifiers and remaining fields
             origId: safeParseInt(playerRosterData.PLYR_ORIGID),
             assetName: playerRosterData.PLYR_ASSETNAME || '',
             characterBodyType: safeParseInt(playerRosterData.PLYR_CHARACTERBODYTYPE),
+            minovr: safeParseInt(playerRosterData.PLYR_MIN_OVR),
+            vismovetype: safeParseInt(playerRosterData.PLYR_VISMOVETYPE),
+            top: safeParseInt(playerRosterData.PLYR_TOP),
+            bottom: safeParseInt(playerRosterData.PLYR_BOTTOM),
+            captainspatch: safeParseInt(playerRosterData.PLYR_CAPTAINSPATCH),
+            reserved1: safeParseInt(playerRosterData.PLYR_RESERVED1),
+            reservedunit10: safeParseInt(playerRosterData.PLYR_RESERVEDUINT10),
+            icon: safeParseInt(playerRosterData.PLYR_ICON),
+            role2: safeParseInt(playerRosterData.PLYR_ROLE2),
+            birthdate: safeParseInt(playerRosterData.PLYR_BIRTHDATE),
+            qbstyle: safeParseInt(playerRosterData.PLYR_QBSTYLE),
+            stance: safeParseInt(playerRosterData.PLYR_STANCE),
+            morale: safeParseInt(playerRosterData.PLYR_MORALE),
+            fatigue: safeParseInt(playerRosterData.PLYR_FATIGUE),
+            playerType: safeParseInt(playerRosterData.PLYR_PLAYERTYPE),
+            portrait_swappable_library_path: safeParseInt(playerRosterData.PLYR_PORTRAIT_SWAPPABLE_LIBRARY_PATH),
+            portrait_force_silhouette: safeParseInt(playerRosterData.PLYR_PORTRAIT_FORCE_SILHOUETTE),
+            schoolyear: safeParseInt(playerRosterData.PLYR_SCHOOLYEAR),
+            redshirted: safeParseInt(playerRosterData.PLYR_REDSHIRTED),
+            comment: safeParseInt(playerRosterData.PLYR_COMMENT),
             rosterId: roster.rosterId
           };
 

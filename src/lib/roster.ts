@@ -259,11 +259,37 @@ export const createRosterFromTemplate = async (form: FormData) => {
             leadBlock: player.leadBlock,
             shortRouteRun: player.shortRouteRun,
             deepRouteRun: player.deepRouteRun,
+            release: player.release,
+            press: player.press,
             
             // Identifiers
             origId: player.origId,
             assetName: player.assetName,
             characterBodyType: player.characterBodyType,
+
+            //miscellaneous
+            minovr: player.minovr,
+            vismovetype: player.vismovetype,
+            top: player.top,
+            bottom: player.bottom,
+            captainspatch : player.captainspatch,
+            reserved1: player.reserved1,
+            reservedunit10: player.reservedunit10,
+            icon: player.icon,
+            role2: player.role2,
+            birthdate: player.birthdate,
+            qbstyle: player.qbstyle,
+            stance: player.stance,
+            morale: player.morale,
+            fatigue: player.fatigue,
+            playerType: player.playerType,
+            portrait_swappable_library_path: player.portrait_swappable_library_path,
+            portrait_force_silhouette: player.portrait_force_silhouette,
+            schoolyear: player.schoolyear,
+            redshirted: player.redshirted,
+            comment: player.comment,
+            
+
             
             // Create loadouts for the new player
             loadouts: {

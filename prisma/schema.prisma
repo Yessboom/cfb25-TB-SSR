@@ -78,6 +78,7 @@ model Player {
   blockShedding          Int
   pursuit                Int
   playRecognition        Int
+  release               Int
   
   // Coverage and Special Skills
   manCoverage            Int
@@ -147,11 +148,33 @@ model Player {
   leadBlock              Int
   shortRouteRun          Int
   deepRouteRun           Int
+  press                  Int
   
   // Identifiers
   origId                 Int
   assetName              String
   characterBodyType      Int
+  minovr              Int
+  vismovetype           Int
+  top                 Int
+  bottom              Int
+  captainspatch        Int
+  reserved1           Int
+  reservedunit10    Int
+  icon                Int
+  role2               Int
+  birthdate           Int
+  qbstyle            Int
+  stance            Int
+  morale            Int
+  fatigue          Int
+  playerType       Int
+  portrait_swappable_library_path Int
+  portrait_force_silhouette Int
+  schoolyear  Int
+  redshirted Int
+  comment Int
+  
 
   @@unique([playerId, rosterId])
 }

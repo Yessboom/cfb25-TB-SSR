@@ -119,7 +119,7 @@ export const updatePlayerSkill = action(async (formData: FormData) => {
       "runBlockPower", "runBlockFinesse", "passBlockPower", "passBlockFinesse", 
       "leadBlock", "tackle", "hitPower", "powerMoves", "finesseMoves", 
       "blockShedding", "pursuit", "playRecognition", "manCoverage", 
-      "zoneCoverage", "kickPower", "kickAccuracy", "longSnapRating"
+      "zoneCoverage", "kickPower", "kickAccuracy", "longSnapRating", "press", "release"
     ];
 
     if (!validSkills.includes(skillName)) {
