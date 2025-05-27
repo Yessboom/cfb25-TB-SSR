@@ -4,13 +4,13 @@ import { getPositionName, formatHeight, formatWeight } from "../utils/utils";
 import { Accessor, Switch, Match} from "solid-js";
 import { useLocation, A } from "@solidjs/router";
 import PlayerSkillTabs from "./PlayerSkillTabs";
-
-
-  
+import EditableInput from "./EditableInput";
+import { updatePlayerBasicInfo } from "~/lib/player";
 
 export default function PlayerDetails({ player }: { player: Accessor<Player | null> }) {
-const location = useLocation();
-const activeTab = createMemo(() => new URLSearchParams(location.search).get("tab") ?? "physical");
+  const location = useLocation();
+  const activeTab = createMemo(() => new URLSearchParams(location.search).get("tab") ?? "physical");
+  
   // Debug: Log when player changes
   createEffect(() => {
     console.log("PlayerDetails received player:", player);
@@ -19,8 +19,6 @@ const activeTab = createMemo(() => new URLSearchParams(location.search).get("tab
   const getSkillValue = (player: any, skillName: string): number | null => {
     return player[skillName] !== undefined && player[skillName] !== null ? player[skillName] : null;
   };
-
-  
 
   const formatSkillName = (skillName: string): string => {
     // Convert camelCase to readable format
@@ -40,11 +38,35 @@ const activeTab = createMemo(() => new URLSearchParams(location.search).get("tab
             <>
               {/* Player Header */}
               <div class="px-4 py-5 sm:px-6 bg-gray-50">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">
-                  {selectedPlayer().firstName} {selectedPlayer().lastName}
+                <h3 class="text-lg leading-6 font-medium text-gray-900 space-x-2">
+                  <EditableInput
+                    value={selectedPlayer().firstName}
+                    playerId={selectedPlayer().id}
+                    field="firstName"
+                    type="text"
+                    updateAction={updatePlayerBasicInfo}
+                    displayClass="font-medium"
+                  />
+                  <EditableInput
+                    value={selectedPlayer().lastName}
+                    playerId={selectedPlayer().id}
+                    field="lastName"
+                    type="text"
+                    updateAction={updatePlayerBasicInfo}
+                    displayClass="font-medium"
+                  />
                 </h3>
                 <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                  #{selectedPlayer().jerseyNumber} • {getPositionName(selectedPlayer().position)}
+                  #<EditableInput
+                    value={selectedPlayer().jerseyNumber}
+                    playerId={selectedPlayer().id}
+                    field="jerseyNumber"
+                    type="number"
+                    min={1}
+                    max={99}
+                    updateAction={updatePlayerBasicInfo}
+                    displayClass="inline"
+                  /> • {getPositionName(selectedPlayer().position)}
                 </p>
               </div>
 
@@ -66,7 +88,17 @@ const activeTab = createMemo(() => new URLSearchParams(location.search).get("tab
                   </div>
                   <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-500">Age</dt>
-                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{selectedPlayer().age}</dd>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      <EditableInput
+                        value={selectedPlayer().age}
+                        playerId={selectedPlayer().id}
+                        field="age"
+                        type="number"
+                        min={18}
+                        max={45}
+                        updateAction={updatePlayerBasicInfo}
+                      />
+                    </dd>
                   </div>
                   <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-500">Position</dt>
@@ -74,11 +106,33 @@ const activeTab = createMemo(() => new URLSearchParams(location.search).get("tab
                   </div>
                   <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-500">Height</dt>
-                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{formatHeight(selectedPlayer().height)}</dd>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      <EditableInput
+                        value={selectedPlayer().height}
+                        playerId={selectedPlayer().id}
+                        field="height"
+                        type="number"
+                        min={60}
+                        max={84}
+                        updateAction={updatePlayerBasicInfo}
+                        formatter={(value) => formatHeight(Number(value))}
+                      />
+                    </dd>
                   </div>
                   <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-500">Weight</dt>
-                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{formatWeight(selectedPlayer().weightPounds)}</dd>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      <EditableInput
+                        value={selectedPlayer().weightPounds}
+                        playerId={selectedPlayer().id}
+                        field="weightPounds"
+                        type="number"
+                        min={150}
+                        max={400}
+                        updateAction={updatePlayerBasicInfo}
+                        formatter={(value) => formatWeight(Number(value))}
+                      />
+                    </dd>
                   </div>
                   <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-500">Potential</dt>
@@ -96,9 +150,9 @@ const activeTab = createMemo(() => new URLSearchParams(location.search).get("tab
                 </dl>
               </div>
 
-            <div class="border-t border-gray-200">
-              <PlayerSkillTabs player={selectedPlayer} />
-            </div>
+              <div class="border-t border-gray-200">
+                <PlayerSkillTabs player={selectedPlayer} />
+              </div>
 
               {/* Contract Info */}
               <Show when={selectedPlayer().contractYearsLeft > 0}>

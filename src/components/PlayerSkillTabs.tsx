@@ -3,6 +3,8 @@ import { A, useLocation } from "@solidjs/router";
 import { Player } from "~/types";
 import { getPositionName } from "../utils/utils";
 import { createEffect, Show } from "solid-js";
+import EditableSkillInput from "./EditableSkillInput";
+import { updatePlayerSkill } from "~/lib/player";
 
 const skillCategories = {
   physical: { name: "Physical", skills: ["speed", "acceleration", "strength", "agility", "jumping", "stamina", "toughness", "injury", "awareness"] },
@@ -66,29 +68,14 @@ export default function PlayerSkillTabs({ player }: { player: Accessor<Player | 
                       {category.skills.map((skillName) => {
                         const skillValue = getSkillValue(currentPlayer(), skillName);
                         return (
-                          skillValue !== null && skillValue !== 0 && (
-                            <div class="bg-gray-50 px-4 py-3 rounded-lg border border-gray-200">
-                              <div class="flex justify-between items-center mb-2">
-                                <span class="text-sm font-medium text-gray-700">{formatSkillName(skillName)}</span>
-                                <span class={`text-lg font-bold ${
-                                  skillValue >= 85 ? "text-green-600" :
-                                  skillValue >= 75 ? "text-blue-600" :
-                                  skillValue >= 65 ? "text-yellow-600" :
-                                  "text-red-600"
-                                }`}>{skillValue}</span>
-                              </div>
-                              <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div
-                                  class={`h-2 rounded-full ${
-                                    skillValue >= 85 ? "bg-green-500" :
-                                    skillValue >= 75 ? "bg-blue-500" :
-                                    skillValue >= 65 ? "bg-yellow-500" :
-                                    "bg-red-500"
-                                  }`}
-                                  style={{ width: `${Math.min(skillValue, 100)}%` }}
-                                />
-                              </div>
-                            </div>
+                          skillValue !== null && (
+                            <EditableSkillInput
+                              value={skillValue}
+                              playerId={currentPlayer().id}
+                              skillName={skillName}
+                              updateAction={updatePlayerSkill}
+                              formatSkillName={formatSkillName}
+                            />
                           )
                         );
                       })}
