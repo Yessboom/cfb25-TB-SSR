@@ -6,6 +6,7 @@ import { useLocation, A } from "@solidjs/router";
 import PlayerSkillTabs from "./PlayerSkillTabs";
 import EditableInput from "./EditableInput";
 import { updatePlayerBasicInfo } from "~/lib/player";
+import { getOverall } from "~/utils/overallCalculator";
 
 export default function PlayerDetails({ player }: { player: Accessor<Player | null> }) {
   const location = useLocation();
@@ -33,6 +34,8 @@ export default function PlayerDetails({ player }: { player: Accessor<Player | nu
       <Show when={player()} fallback={<p class="p-4 text-gray-500">Select a player to view details</p>}>
         {(selectedPlayer) => {
           console.log("Rendering selected player:", selectedPlayer());
+          const overall = createMemo(() => getOverall(selectedPlayer()));
+
           
           return (
             <>
@@ -77,12 +80,12 @@ export default function PlayerDetails({ player }: { player: Accessor<Player | nu
                     <dt class="text-sm font-medium text-gray-500">Overall Rating</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                       <span class={`inline-flex items-center justify-center w-8 h-8 rounded-full ${
-                        selectedPlayer().overallRating >= 85 ? "bg-green-100 text-green-800" :
-                        selectedPlayer().overallRating >= 75 ? "bg-blue-100 text-blue-800" :
-                        selectedPlayer().overallRating >= 65 ? "bg-yellow-100 text-yellow-800" :
+                        overall() >= 85 ? "bg-green-100 text-green-800" :
+                        overall() >= 75 ? "bg-blue-100 text-blue-800" :
+                        overall() >= 65 ? "bg-yellow-100 text-yellow-800" :
                         "bg-red-100 text-red-800"
                       }`}>
-                        {selectedPlayer().overallRating}
+                        {overall()}
                       </span>
                     </dd>
                   </div>

@@ -183,7 +183,7 @@ export default function EditableSkillInput(props: EditableSkillInputProps) {
           min="0"
           max="99"
           class="w-16 text-sm text-center border rounded px-1 py-1"
-          title="Auto-submit on every keystroke"
+          title="Enter to submit"
           oninput="this.form.submit()"
         />
       </form>
