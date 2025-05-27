@@ -1,7 +1,9 @@
 import { getSession } from "~/lib/server";
 import { db } from "~/lib/db";
+import type { APIEvent } from "@solidjs/start/server";
 
-export const GET = async (event) => {
+
+export const GET = async (event: APIEvent) => {
   try {
     const rosterId = event.params.rosterId;
     const session = await getSession();
@@ -29,7 +31,7 @@ export const GET = async (event) => {
     
     roster.players.forEach(player => {
       rosterJson[player.playerId] = {
-PLYR_ID: player.playerId,
+        PLYR_ID: player.playerId,
         PLYR_FIRSTNAME: player.firstName,
         PLYR_LASTNAME: player.lastName,
         PLYR_JERSEYNUM: player.jerseyNumber.toString(),
@@ -142,7 +144,13 @@ PLYR_ID: player.playerId,
         PLYR_IS_IMPACT_PLAYER: player.isImpactPlayer ? "1" : "0",
         PLYR_REDSHIRTED: player.redshirted.toString(),
         PLYR_IS_EDIT_ALLOWED: player.isEditAllowed ? "1" : "0",
-        PLYR_CHARACTERBODYTYPE: player.characterBodyType.toString()
+        PLYR_CHARACTERBODYTYPE: player.characterBodyType.toString(),
+        
+        // Additional fields that might be needed for proper game import
+        PLYR_BODYTYPE: (player.bodyType || 0).toString(),
+        PLYR_SKINTONE: player.skinTone.toString(),
+        PLYR_SKINTONESCALE: player.skinToneScale.toString(),
+        PLYR_GENERICHEADNAME: player.genericHeadName || ""
       };
     });
 
