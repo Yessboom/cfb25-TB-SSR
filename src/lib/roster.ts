@@ -3,6 +3,7 @@ import { query, action, redirect } from "@solidjs/router"
 import { z } from 'zod'
 import { Roster, Player, PlayerLoadout } from "~/types"
 import { getSession } from './server'
+import { getPortraitImage } from '~/utils/portraitMapping'
 
 export const getRosters = query(async () => {
   'use server'
@@ -60,9 +61,19 @@ export const getRosterWithPlayers = query(async (rosterId: string) => {
         user: true
       }
     });
-    
-    if (!roster) throw new Error("Roster not found");
-    return roster;
+
+    if (!roster) return null;
+    // Map players to include portrait image
+        const playersWithPortraits = roster.players.map(player => ({
+      ...player,
+      portraitImage: getPortraitImage(player.portrait, false),
+      portraitThumbnail: getPortraitImage(player.portrait, true)
+    }));
+    return {
+      ...roster,
+      players: playersWithPortraits
+    };
+
   } catch (error) {
     console.error(`Failed to fetch roster ${rosterId}:`, error);
     throw new Error("Failed to load roster details");
@@ -84,8 +95,12 @@ export const getPlayerDetails = query(async (playerId: string) => {
       }
     });
     
-    if (!player) throw new Error("Player not found");
-    return player;
+    if (!player) return null;
+    return {
+      ...player,
+      portraitImage: getPortraitImage(player.portrait, false),
+      portraitThumbnail: getPortraitImage(player.portrait, true)
+    };
   } catch (error) {
     console.error(`Failed to fetch player ${playerId}:`, error);
     throw new Error("Failed to load player details");
@@ -288,7 +303,7 @@ export const createRosterFromTemplate = async (form: FormData) => {
             schoolyear: player.schoolyear,
             redshirted: player.redshirted,
             comment: player.comment,
-            
+
 
             
             // Create loadouts for the new player
@@ -347,3 +362,29 @@ export async function deleteRosterById(rosterId: string) {
   await db.roster.delete({ where: { rosterId } })
 }
 export const deleteRosterAction = action(deleteRosterById)
+
+export async function renameRoster(formData: FormData) {
+  "use server"
+  const session = await getSession()
+  if (!session) throw new Error("Not authenticated")
+  
+  const rosterId = formData.get("rosterId") as string
+  const newName = formData.get("name") as string
+  
+  if (!rosterId || !newName) {
+    throw new Error("Missing required fields")
+  }
+  
+  const roster = await db.roster.findUnique({ where: { rosterId } })
+  if (!roster || roster.userId !== session.data.userId) {
+    throw new Error("Roster not found or access denied")
+  }
+  
+  await db.roster.update({
+    where: { rosterId },
+    data: { name: newName.trim() }
+  })
+  
+  return { success: true }
+}
+export const renameRosterAction = action(renameRoster);

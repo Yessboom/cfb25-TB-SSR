@@ -2,6 +2,7 @@
 import { action, redirect } from "@solidjs/router";
 import { db } from "./db";
 import { getSession } from "./server";
+import { getPortraitImage } from "~/utils/portraitMapping";
 
 export const updatePlayerBasicInfo = action(async (formData: FormData) => {
   "use server";
@@ -43,6 +44,8 @@ export const updatePlayerBasicInfo = action(async (formData: FormData) => {
       updateData[field] = parseInt(value);
     } else if (field === "weightPounds") {
       updateData[field] = parseInt(value);
+    }else if (field === "isImpactPlayer") {
+      updateData[field] = value === "1" || value === "true";
     }
 
     await db.player.update({

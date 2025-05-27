@@ -9,9 +9,14 @@ export type Roster = Prisma.RosterGetPayload<{
   include: { user: true; players: true }
 }>
 
-export type Player = Prisma.PlayerGetPayload<{
+export type basePlayer = Prisma.PlayerGetPayload<{
   include: { roster: true; loadouts: true }
 }>
+
+export type Player = basePlayer & {
+  portraitImage?: string;
+  portraitThumbnail?: string;
+}
 
 export type PlayerLoadout = Prisma.PlayerLoadoutGetPayload<{
   include: { player: true; user: true; loadoutElements: true }
