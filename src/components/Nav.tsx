@@ -1,6 +1,7 @@
 import { useLocation, createAsync, A, useIsRouting } from "@solidjs/router";
 import { JSXElement, createSignal, Show, onMount, createEffect } from "solid-js";
 import { getUser, logout } from "../lib/login";
+import { isServer } from "solid-js/web";
 
 type NavLinkProps = {
   href: string;
@@ -38,21 +39,9 @@ export default function Nav() {
           <NavLink href="/about">About</NavLink>
           <NavLink href="/rostersTemplate">Templates</NavLink>
           <NavLink href="/myRosters">myRosters</NavLink>
+          <NavLink href="/login">Login</NavLink>
           
-          <div class="ml-auto flex items-center">
-            <Show when={!user()} fallback={
-              <>
-                <span class="mr-4">Welcome, {user()?.username}</span>
-                <form action={logout} method="post">
-        <button name="logout" type="submit">
-          Logout
-        </button>
-      </form>
-              </>
-            }>
-              <NavLink href="/login">Login</NavLink>
-            </Show>
-          </div>
+
         </ul>
       </nav>
     </>
