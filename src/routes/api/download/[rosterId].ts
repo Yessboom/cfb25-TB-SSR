@@ -146,11 +146,6 @@ export const GET = async (event: APIEvent) => {
         PLYR_IS_EDIT_ALLOWED: player.isEditAllowed ? "1" : "0",
         PLYR_CHARACTERBODYTYPE: player.characterBodyType.toString(),
         
-        // Additional fields that might be needed for proper game import
-        PLYR_BODYTYPE: (player.bodyType || 0).toString(),
-        PLYR_SKINTONE: player.skinTone.toString(),
-        PLYR_SKINTONESCALE: player.skinToneScale.toString(),
-        PLYR_GENERICHEADNAME: player.genericHeadName || ""
       };
     });
 
