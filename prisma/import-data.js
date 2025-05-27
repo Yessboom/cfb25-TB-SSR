@@ -20,7 +20,7 @@ const safeBigInt = (value) => {
 async function importRostersAndVisuals() {
     try {
       console.log('Starting import process...');
-      const characters = ['powerhouse',  'spread'];
+      const characters = ['option'];
       
       // Cache for loadout elements
       const loadoutElementsCache = new Map();
@@ -130,7 +130,7 @@ async function importRostersAndVisuals() {
             genericHead: safeParseInt(playerRosterData.PLYR_GENERICHEAD),
             genericHeadName: playerVisualData.genericHeadName || '',
             bodyType: playerVisualData.bodyType ? parseInt(playerVisualData.bodyType, 10) : 1,
-            skinTone: playerVisualData.skinTone || '',
+            skinTone: safeParseInt(playerVisualData.skinTone),
             skinToneScale: safeBigInt(playerVisualData.skinToneScale),
             longSnapRating: safeParseInt(playerRosterData.PLYR_LONGSNAPRATING),
             portrait: safeParseInt(playerRosterData.PLYR_PORTRAIT),
@@ -224,14 +224,15 @@ async function importRostersAndVisuals() {
                     // Cache this element for future reference
                     loadoutElementsCache.set(elementKey, loadoutElementId);
                   }
-                  
-                  // Now create the join table entry to link this element to the loadout
-                  await prisma.PlayerLoadoutToElement.create({
-                    data: {
-                      loadoutElementId: loadoutElementId,
-                      playerLoadoutId: loadout.playerLoadoutId
-                    }
-                  });
+                    await prisma.playerLoadout.update({
+                      where: { playerLoadoutId: loadout.playerLoadoutId },
+                      data: {
+                        loadoutElements: {
+                          connect: { loadoutElementId }
+                        }
+                      }
+                    });
+
                 }
               }
             }
