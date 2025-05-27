@@ -61,7 +61,16 @@ export const updatePlayerBasicInfo = action(async (formData: FormData) => {
 
     // If redirect path is provided (no-JS scenario), redirect back to the page
     if (redirectPath) {
-      throw redirect(redirectPath);
+      // Parse current URL to preserve search params
+      const url = new URL(redirectPath, 'http://localhost'); // base URL needed for parsing
+      
+      // Ensure the selected player is preserved in the URL
+      if (!url.searchParams.has('selected')) {
+        url.searchParams.set('selected', playerId);
+      }
+      
+      // Redirect to the same page with preserved params
+      throw redirect(url.pathname + url.search);
     }
 
     return { success: true };
