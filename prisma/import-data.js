@@ -20,9 +20,9 @@ const safeBigInt = (value) => {
 async function importRostersAndVisuals() {
     try {
       console.log('Starting import process...');
-      const characters = ['option'];
+      const characters = ['option', "powerhouse", "spread"];
       
-      // Cache for loadout elements
+      // Cache for loadout elements - using a more specific key
       const loadoutElementsCache = new Map();
   
       for (const characterName of characters) {
@@ -171,31 +171,27 @@ async function importRostersAndVisuals() {
           // Process loadouts
           if (playerVisualData.loadouts && playerVisualData.loadouts.length > 0) {
             for (const loadoutData of playerVisualData.loadouts) {
-              // Create a loadout for the player
-              const loadout = await prisma.playerLoadout.create({
-                data: {
-                  playerId:       player.id,               // use the PK of the just‐created Player
-                  userId:         placeholderUser.userId,  // supply your upserted user
-                  loadoutType:    loadoutData.loadoutType,
-                  loadoutCategory: loadoutData.loadoutCategory,
-                }
-              });
-  
+              
+              // Collect all loadout element IDs for this loadout
+              const loadoutElementIds = [];
+              
               if (loadoutData.loadoutElements && loadoutData.loadoutElements.length > 0) {
                 for (const element of loadoutData.loadoutElements) {
-                  // Create a unique key for caching
-                  const elementKey = `${element.slotType}:${element.itemAssetName}`;
-                  const barycentricBlend = element.blends?.[0]?.barycentricBlend || 0;
-                  const baseBlend = element.blends?.[0]?.baseBlend || 0;
+                  // Skip empty objects or objects without itemAssetName
+                  if (!element.itemAssetName) {
+                    continue;
+                  }
+
+                  const barycentricBlend = element.blends?.[0]?.barycentricBlend || null;
+                  const baseBlend = element.blends?.[0]?.baseBlend || null;
                   
-                  // Check if we've seen this exact element before
+                  const elementKey = `${element.slotType}:${element.itemAssetName}:${barycentricBlend}:${baseBlend}`;
+                  
                   let loadoutElementId;
                   
                   if (loadoutElementsCache.has(elementKey)) {
-                    // We've seen this element before, reuse it
                     loadoutElementId = loadoutElementsCache.get(elementKey);
                   } else {
-                    // Check if this element already exists in the database
                     const existingElement = await prisma.loadoutElement.findFirst({
                       where: {
                         slotType: element.slotType,
@@ -206,10 +202,8 @@ async function importRostersAndVisuals() {
                     });
                     
                     if (existingElement) {
-                      // Use the existing element
                       loadoutElementId = existingElement.loadoutElementId;
                     } else {
-                      // Create a new element
                       const newElement = await prisma.loadoutElement.create({
                         data: {
                           slotType: element.slotType,
@@ -221,19 +215,30 @@ async function importRostersAndVisuals() {
                       loadoutElementId = newElement.loadoutElementId;
                     }
                     
-                    // Cache this element for future reference
                     loadoutElementsCache.set(elementKey, loadoutElementId);
                   }
-                    await prisma.playerLoadout.update({
-                      where: { playerLoadoutId: loadout.playerLoadoutId },
-                      data: {
-                        loadoutElements: {
-                          connect: { loadoutElementId }
-                        }
-                      }
-                    });
-
+                  
+                  loadoutElementIds.push(loadoutElementId);
                 }
+              }
+              
+              // Only create the loadout if we have valid elements
+              if (loadoutElementIds.length > 0) {
+                const loadout = await prisma.playerLoadout.create({
+                  data: {
+                    playerId: player.id,
+                    userId: placeholderUser.userId,
+                    loadoutType: loadoutData.loadoutType,
+                    loadoutCategory: loadoutData.loadoutCategory,
+                    loadoutElements: {
+                      connect: loadoutElementIds.map(id => ({ loadoutElementId: id }))
+                    }
+                  }
+                });
+                
+                console.log(`Created loadout ${loadout.playerLoadoutId} for player ${player.firstName} ${player.lastName} with ${loadoutElementIds.length} elements`);
+              } else {
+                console.log(`Skipped empty loadout for player ${player.firstName} ${player.lastName}`);
               }
             }
           }
