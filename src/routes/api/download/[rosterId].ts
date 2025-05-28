@@ -149,7 +149,7 @@ export const GET = async (event: APIEvent) => {
       };
     });
 
-    const jsonString = JSON.stringify(rosterJson, null, 2);
+    const jsonString = JSON.stringify(rosterJson, null, 2) + '\n}';
     const filename = `${roster.name?.replace(/[^a-zA-Z0-9]/g, '_') || 'roster'}.json`;
     
     return new Response(jsonString, {

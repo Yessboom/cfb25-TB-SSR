@@ -5,11 +5,11 @@ import { Accessor, Switch, Match} from "solid-js";
 import { useLocation, A } from "@solidjs/router";
 import PlayerSkillTabs from "./PlayerSkillTabs";
 import EditableInput from "./EditableInput";
-import SliderInput from "./SliderInput";
 import ImpactPlayerToggle from "./playerImpact";
 import { updatePlayerBasicInfo } from "~/lib/player";
 import { getOverall } from "~/utils/overallCalculator";
 import { getPortraitImage } from "~/utils/portraitMapping";
+import SliderInput from "./sliderInput";
 
 export default function PlayerDetails({ player }: { player: Accessor<Player | null> }) {
   const location = useLocation();
