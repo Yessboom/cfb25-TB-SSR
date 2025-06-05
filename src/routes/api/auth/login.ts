@@ -1,6 +1,8 @@
 import type { APIEvent } from "@solidjs/start/server";
 import { login, validateUsername, validatePassword, getSession } from "~/lib/server";
 
+
+
 export const POST = async (event: APIEvent) => {
   try {
     const body = await event.request.json();
