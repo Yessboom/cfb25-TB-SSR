@@ -34,7 +34,7 @@ export const GET = async (event: APIEvent) => {
     return new Response(JSON.stringify({ 
       success: true, 
       rosters: rosters.map(roster => ({
-        id: roster.rosterId,
+        rosterId: roster.rosterId,
         name: roster.name,
         isTemplate: roster.isTemplate,
         playerCount: roster.players.length,

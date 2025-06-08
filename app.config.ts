@@ -5,7 +5,9 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     server:{
-      cors: false
+      cors: false,
+      host: true, // Allow access from other devices on the network
+      port: 3000, // Change to your desired port
     }
 
   },
