@@ -1,16 +1,6 @@
 import { createMiddleware } from "@solidjs/start/middleware";
 
-const TRUSTED_ORIGINS = [
-  "http://localhost:3000", 
-  "http://localhost:5173", 
-  "http://localhost:8081",
-  "http://10.0.2.2:3000",     // Android Emulator
-  "http://192.168.68.102:8081", // Expo dev server
-  "http://192.168.68.102:3000", // Direct API calls from mobile
-  // Add these for React Native
-  "capacitor://localhost",
-  "ionic://localhost",
-];
+
 export default createMiddleware({
   onRequest: (event) => {
     const { request } = event;
@@ -23,7 +13,7 @@ export default createMiddleware({
     event.locals.startTime = Date.now();
 
     // Handle preflight requests in onRequest to intercept them early
-    if (request.method === "OPTIONS" && url.pathname.startsWith("/api") && origin && TRUSTED_ORIGINS.includes(origin)) {
+    if (request.method === "OPTIONS" && url.pathname.startsWith("/api") && origin) {
       console.log("🎯 INTERCEPTING PREFLIGHT REQUEST");
       
       const allowHeaders = "Authorization, Content-Type";
@@ -54,7 +44,7 @@ export default createMiddleware({
     const isApiRequest = url.pathname.startsWith("/api");
 
     // Set CORS headers for actual API requests (not OPTIONS)
-    if (isApiRequest && origin && TRUSTED_ORIGINS.includes(origin) && request.method !== "OPTIONS") {
+    if (isApiRequest && origin && request.method !== "OPTIONS") {
       console.log("🎯 SETTING CORS HEADERS FOR ACTUAL REQUEST");
       response.headers.set("Access-Control-Allow-Origin", origin);
       response.headers.set("Access-Control-Allow-Credentials", "true");

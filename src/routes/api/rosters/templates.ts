@@ -28,7 +28,7 @@ export const GET = async (event: APIEvent) => {
     return new Response(JSON.stringify({ 
       success: true, 
       templates: templates.map(template => ({
-        id: template.rosterId,
+        rosterId: template.rosterId,
         name: template.name,
         playerCount: template.players.length,
         createdBy: template.user?.username || 'Unknown',
