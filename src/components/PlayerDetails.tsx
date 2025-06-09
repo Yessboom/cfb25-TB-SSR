@@ -31,6 +31,7 @@ export default function PlayerDetails({ player }: { player: Accessor<Player | nu
       .replace(/^./, str => str.toUpperCase())
       .trim();
   };
+  
 
   return (
     <div class="bg-white shadow overflow-hidden sm:rounded-lg">
@@ -70,6 +71,7 @@ export default function PlayerDetails({ player }: { player: Accessor<Player | nu
                   <div class="flex-1 min-w-0">
                     <div class="flex items-center gap-2">
                       <h3 class="text-lg leading-6 font-medium text-gray-900 space-x-2">
+                        
                         <EditableInput
                           value={selectedPlayer().firstName}
                           playerId={selectedPlayer().id}
@@ -173,8 +175,8 @@ export default function PlayerDetails({ player }: { player: Accessor<Player | nu
                         value={selectedPlayer().weightPounds}
                         playerId={selectedPlayer().id}
                         field="weightPounds"
-                        min={150}
-                        max={400}
+                        min={10}
+                        max={250}
                         step={5}
                         formatter={(value) => formatWeight(value)}
                         label="Weight"
@@ -202,24 +204,8 @@ export default function PlayerDetails({ player }: { player: Accessor<Player | nu
                 <PlayerSkillTabs player={selectedPlayer} />
               </div>
 
-              {/* Contract Info */}
-              <Show when={selectedPlayer().contractYearsLeft > 0}>
-                <div class="border-t border-gray-200 bg-gray-50 px-4 py-5 sm:px-6">
-                  <h4 class="text-base font-medium text-gray-900 mb-3">Contract Details</h4>
-                  <div class="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span class="block font-medium text-gray-700">Years Left</span>
-                      <span class="text-gray-900">{selectedPlayer().contractYearsLeft}</span>
-                    </div>
-                    <div>
-                      <span class="block font-medium text-gray-700">Total Salary</span>
-                      <span class="text-gray-900">${selectedPlayer().validTotalSalary?.toLocaleString()}</span>
-                    </div>
-                  </div>
-                </div>
-              </Show>
 
-              {/* Loadouts Section */}
+              {/* Loadouts Section  NOT IN THE CODE RIGHT NOW */}
               <Show when={selectedPlayer().loadouts && selectedPlayer().loadouts.length > 0}>
                 <div class="border-t border-gray-200 bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">Equipment</dt>
