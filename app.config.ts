@@ -7,7 +7,7 @@ export default defineConfig({
     server:{
       cors: false,
       host: true, // Allow access from other devices on the network
-      port: 3000, // Change to your desired port
+      port: 3000, 
     }
 
   },

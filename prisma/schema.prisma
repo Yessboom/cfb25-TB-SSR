@@ -108,7 +108,7 @@ model Player {
   genericHeadName        String?
   bodyType               Int?
   skinTone               Int
-  skinToneScale          BigInt
+  skinToneScale          Int
   
   // Roster Relationship
   rosterId               String?
