@@ -6,7 +6,7 @@ import { A } from "@solidjs/router";
 
 
 export default function Home() {
-  const user = createAsync(() => getUser().catch(() => null), { deferStream: true });
+  const user = createAsync(() => getUser().catch(() => null));
 
   return (
     <main class="w-full p-4 space-y-6">

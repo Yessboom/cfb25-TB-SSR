@@ -3,7 +3,7 @@ import { db } from "./db";
 import bcrypt from "bcryptjs";
 import { onMount } from "solid-js";
 import { c } from "vinxi/dist/types/lib/logger";
-import {query} from "@solidjs/router"
+import {query, redirect} from "@solidjs/router"
 
 type SessionData = {
   userId?: string;

@@ -8,7 +8,7 @@ export const route = {
 } satisfies RouteDefinition;
 
 export default function RosterTemplates() {
-  const user = createAsync(() => getUser(), { deferStream: true });
+  const user = createAsync(() => getUser().catch(() => null), { deferStream: true });
   
   const myRoster = createAsync(() => getMyRosters(), { deferStream: true });
   const deletingRoster = useSubmissions(deleteRosterAction);
@@ -50,7 +50,7 @@ export default function RosterTemplates() {
         </Show>
 
         {/* Rosters Grid */}
-        <Show when={filteredRosters().length > 0}>
+        <Show when={filteredRosters().length > 0 && user()}>
           <div class="grid gap-4">
             <For each={filteredRosters()}>
               {(roster) => (

@@ -19,7 +19,7 @@ export const getUser = query(async () => {
     if (!user) throw new Error("User not found");
     return { id: user.userId, username: user.username };
   } catch {
-    await logoutSession();
+    //await logoutSession();
     throw redirect("/login");
   }
 }, "user");

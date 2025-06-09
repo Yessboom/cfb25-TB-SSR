@@ -36,7 +36,7 @@ export default function Nav() {
       <nav class="bg-sky-800">
         <ul class="container flex items-center p-3 text-gray-200">
           <NavLink href="/">Home</NavLink>
-          <NavLink href="/about">About</NavLink>
+
           <NavLink href="/rostersTemplate">Templates</NavLink>
           <NavLink href="/myRosters">myRosters</NavLink>
           <NavLink href="/login">Login</NavLink>
