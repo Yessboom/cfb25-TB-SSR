@@ -77,14 +77,14 @@ export const updatePlayerBasicInfo = action(async (formData: FormData) => {
   } catch (error) {
     console.error("Update player basic info error:", error);
     
-    // Handle redirect errors (these are actually successful redirects)
+    // Handle redirect errors 
     if (error && typeof error === 'object' && 'status' in error && error.status === 302) {
       throw error;
     }
     
     const redirectPath = formData.get("redirect") as string;
     if (redirectPath) {
-      // For no-JS scenario, redirect back with error (you might want to add error handling)
+      // For no-JS scenario, redirect back with error
       throw redirect(redirectPath);
     }
     
@@ -165,7 +165,7 @@ export const updatePlayerSkill = action(async (formData: FormData) => {
     
     const redirectPath = formData.get("redirect") as string;
     if (redirectPath) {
-      // For no-JS scenario, redirect back with error (you might want to add error handling)
+      // For no-JS scenario, redirect back with error 
       throw redirect(redirectPath);
     }
     

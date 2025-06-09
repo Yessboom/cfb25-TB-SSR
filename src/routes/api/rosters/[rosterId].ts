@@ -1,4 +1,3 @@
-// src/routes/api/rosters/[rosterId]/index.ts
 import type { APIEvent } from "@solidjs/start/server";
 import { getSession } from "~/lib/server";
 import { db } from "~/lib/db";
@@ -126,7 +125,6 @@ export const GET = async (event: APIEvent) => {
   }
 };
 
-// Apply the same fix to your DELETE and PATCH methods
 export const DELETE = async (event: APIEvent) => {
   try {
     const session = await getSession();

@@ -17,7 +17,7 @@ const skillCategories = {
   kicking: { name: "Kicking", skills: ["kickPower", "kickAccuracy", "kickReturn", "longSnapRating"] }
 };
 
-// Change the type to accept an Accessor instead of direct Player
+
 export default function PlayerSkillTabs({ player }: { player: Accessor<Player | null> }) {
   const location = useLocation();
   const activeTab = createMemo(() => {

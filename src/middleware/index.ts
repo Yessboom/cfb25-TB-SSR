@@ -7,7 +7,7 @@ export default createMiddleware({
     const url = new URL(request.url);
     const origin = request.headers.get("Origin");
     
-    // This should appear in your server console if middleware is working
+    // This sis to test if middelware is working
     console.log("🔥🔥🔥 MIDDLEWARE IS RUNNING!", request.method, url.pathname, "Origin:", origin);
     
     event.locals.startTime = Date.now();

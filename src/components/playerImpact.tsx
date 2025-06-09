@@ -28,7 +28,7 @@ export default function ImpactPlayerToggle(props: ImpactPlayerToggleProps) {
         }`}
         title={props.isImpactPlayer ? "Remove impact player status" : "Mark as impact player"}
         onClick={isClient() ? (e) => {
-          // Immediate visual feedback for better UX
+
           e.preventDefault();
           const form = e.currentTarget.closest('form') as HTMLFormElement;
           if (form) {

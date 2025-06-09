@@ -20,17 +20,7 @@ export default function PlayerDetails({ player }: { player: Accessor<Player | nu
     console.log("PlayerDetails received player:", player);
   });
 
-  const getSkillValue = (player: any, skillName: string): number | null => {
-    return player[skillName] !== undefined && player[skillName] !== null ? player[skillName] : null;
-  };
 
-  const formatSkillName = (skillName: string): string => {
-    // Convert camelCase to readable format
-    return skillName
-      .replace(/([A-Z])/g, ' $1')
-      .replace(/^./, str => str.toUpperCase())
-      .trim();
-  };
   
 
   return (

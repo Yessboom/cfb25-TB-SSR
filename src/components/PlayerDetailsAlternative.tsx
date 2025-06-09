@@ -1,14 +1,10 @@
 import { createEffect, onMount } from "solid-js";
 import { Player } from "~/types";
 import { getPositionName } from "../utils/utils";
+import { formatHeight } from "../utils/utils";
 
-// Helper function to convert height in inches to feet and inches format
-const formatHeight = (heightInInches: number) => {
-  const feet = Math.floor(heightInInches / 12);
-  const inches = heightInInches % 12;
-  return `${feet}'${inches}"`;
-};
 
+//Component not used
 export default function PlayerDetailsAlternative({ player }: { player: Player | null | undefined }) {
   // Debug: Log when component mounts
   onMount(() => {
